@@ -168,7 +168,67 @@ public class Transform {
      * @return the rotated image
      */
     public static RGBAPixel[][] rotateRight(final RGBAPixel[][] originalImage) {
-        return null;
+
+        int m = originalImage.length; //"# of rows"
+        int n = originalImage[0].length; //"# of columns"
+        int big = m;
+        int small = n;
+
+        if (m > n) {
+            big = m;
+            small = n;
+        } else if (n > m) {
+            big = n;
+            small = m;
+        }
+
+        int boundary = (big - small) / 2;
+
+        RGBAPixel[][] rotatedImage = new RGBAPixel[n][m]; //invert rows/columns of originalImage
+        //If square matrix, simply rotate right
+        if (m == n) {
+            for (int i = 0; i < originalImage.length; i++) {
+                for (int j = 0; j < originalImage[i].length; j++) {
+                    rotatedImage[j][originalImage.length - 1 - i] = originalImage[i][j];
+                }
+            }
+            return rotatedImage;
+        } else if (m > n) {
+            for (int i = 0; i < rotatedImage.length; i++) {
+                for (int j = 0; j < rotatedImage[i].length; j++) {
+                    if (j < boundary) {
+                        rotatedImage[i][j] = RGBAPixel.getFillValue();
+                    } else if ((j >= boundary) && (j < rotatedImage[i].length - boundary)) {
+                        rotatedImage[j][originalImage.length - 1 - i] = originalImage[i][j];
+                    } else if (j >= rotatedImage[i].length - boundary) {
+                        rotatedImage[i][j] = RGBAPixel.getFillValue();
+                    }
+                }
+            }
+            return rotatedImage;
+        } else {
+            for (int i = 0; i < rotatedImage.length; i++) {
+                for (int j = 0; j < rotatedImage[i].length; j++) {
+                    if (i < boundary) {
+                        rotatedImage[i][j] = RGBAPixel.getFillValue();
+                    } else if ((i >= boundary) && (i < rotatedImage.length - boundary)) {
+                        rotatedImage[j][originalImage.length - 1 - i] = originalImage[i][j];
+                    } else if (i >= rotatedImage.length - boundary) {
+                        rotatedImage[i][j] = RGBAPixel.getFillValue();
+                    }
+                }
+            }
+            return rotatedImage;
+
+        }
+        /**
+        //Rotate right for a square matrix
+        for (int i = 0; i < originalImage.length; i++) {
+            for (int j = 0; j < originalImage[i].length; j++) {
+                rotatedImage[j][originalImage.length - 1 - i] = originalImage[i][j];
+            }
+        }
+         */
     }
 
     /**
@@ -177,7 +237,18 @@ public class Transform {
      * @return the flipped image
      */
     public static RGBAPixel[][] flipVertical(final RGBAPixel[][] originalImage) {
-        return null;
+
+        if (originalImage == null) {
+            return null;
+        }
+
+        RGBAPixel[][] flippedImage = new RGBAPixel[originalImage.length][originalImage[0].length];
+        for (int i = 0; i < originalImage.length; i++) {
+            for (int j = 0; j < originalImage[0].length; j++) {
+                flippedImage[i][originalImage[i].length - 1 - i] = originalImage[i][j];
+            }
+        }
+        return flippedImage;
     }
 
     /**
@@ -186,7 +257,18 @@ public class Transform {
      * @return the flipped image
      */
     public static RGBAPixel[][] flipHorizontal(final RGBAPixel[][] originalImage) {
-        return null;
+
+        if (originalImage == null) {
+            return null;
+        }
+
+        RGBAPixel[][] flippedImage = new RGBAPixel[originalImage.length][originalImage[0].length];
+        for (int i = 0; i < originalImage.length; i++) {
+            for (int j = 0; j < originalImage[0].length; j++) {
+                flippedImage[originalImage.length - 1 - i][j] = originalImage[i][j];
+            }
+        }
+        return flippedImage;
     }
 
     /**
@@ -196,6 +278,7 @@ public class Transform {
      * @return the shrunken image
      */
     public static RGBAPixel[][] shrinkVertical(final RGBAPixel[][] originalImage, final int amount) {
+
         return null;
     }
 
@@ -206,7 +289,61 @@ public class Transform {
      * @return the expanded image
      */
     public static RGBAPixel[][] expandVertical(final RGBAPixel[][] originalImage, final int amount) {
-        return null;
+
+        if (originalImage == null) {
+            return null;
+        }
+
+        RGBAPixel[][] expandedImage = new RGBAPixel[originalImage.length][originalImage[0].length];
+        int middleFirst = (expandedImage[0].length / 2) - 1;
+        int middleLast = (expandedImage[0].length / 2);
+
+        for (int i = 0; i < originalImage.length; i++) {
+            for (int j = middleLast; j < originalImage[i].length; j++) {
+                int column = ((j - middleLast) / amount) + middleLast;
+                expandedImage[i][j] = originalImage[i][column];
+            }
+        }
+
+        for (int i = 0; i < originalImage.length; i++) {
+            for (int j = middleFirst; j >= 0; j--) {
+                int column = ((j - middleFirst) / amount) + middleFirst;
+                expandedImage[i][j] = originalImage[i][column];
+            }
+        }
+        return expandedImage;
+    }
+
+    /**
+     * Expand in the horizontal axis around the image center.
+     * @param originalImage the image to expand
+     * @param amount the factor by which the image's width is increased
+     * @return the expanded image
+     */
+    public static RGBAPixel[][] expandHorizontal(final RGBAPixel[][] originalImage, final int amount) {
+
+        if (originalImage == null) {
+            return null;
+        }
+
+        RGBAPixel[][] expandedImage = new RGBAPixel[originalImage.length][originalImage[0].length];
+        int middleFirst = (expandedImage.length / 2) - 1;
+        int middleLast = (expandedImage.length / 2);
+
+        for (int i = middleLast; i < originalImage.length; i++) {
+            for (int j = 0; j < originalImage[i].length; j++) {
+                int row = ((i - middleLast) / amount) + middleLast;
+                expandedImage[i][j] = originalImage[row][j];
+            }
+        }
+
+        for (int i = middleFirst; i >= 0; i--) {
+            for (int j = 0; j < originalImage[i].length; j++) {
+                int row = ((i - middleFirst) / amount) + middleFirst;
+                expandedImage[i][j] = originalImage[row][j];
+            }
+        }
+        return expandedImage;
     }
 
     /**
@@ -218,16 +355,4 @@ public class Transform {
     public static RGBAPixel[][] shrinkHorizontal(final RGBAPixel[][] originalImage, final int amount) {
         return null;
     }
-
-    /**
-     * Expand in the horizontal axis around the image center.
-     * @param originalImage the image to expand
-     * @param amount the factor by which the image's width is increased
-     * @return the expanded image
-     */
-    public static RGBAPixel[][] expandHorizontal(final RGBAPixel[][] originalImage, final int amount) {
-        return null;
-    }
-
-
 }
