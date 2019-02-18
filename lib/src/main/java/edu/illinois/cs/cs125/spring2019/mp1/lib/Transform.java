@@ -159,7 +159,60 @@ public class Transform {
      * @return the rotated image
      */
     public static RGBAPixel[][] rotateLeft(final RGBAPixel[][] originalImage) {
-        return null;
+
+        if (originalImage == null) {
+            return null;
+        }
+
+        RGBAPixel[][] rotatedImage = new RGBAPixel[originalImage[0].length][originalImage.length];
+        RGBAPixel[][] finalImage = new RGBAPixel[originalImage.length][originalImage[0].length];
+
+        int finalRow = originalImage.length;
+        int finalColumn = originalImage[0].length;
+
+        for (int i = 0; i < originalImage.length; i++) {
+            for (int j = 0; j < originalImage[i].length; j++) {
+                rotatedImage[j][originalImage.length - 1 - i] = originalImage[i][j];
+            }
+        }
+
+        //Rows > Columns
+        if (finalRow > finalColumn) {
+            for (int i = 0; i < finalImage.length; i++) {
+                for (int j = 0; j < finalImage[0].length; j++) {
+                    if ((i < ((finalRow - finalColumn) / 2)) || (i >= (finalRow - ((finalRow - finalColumn) / 2)))) {
+                        finalImage[i][j] = RGBAPixel.getFillValue();
+                    } else {
+                        finalImage[i][j] =
+                                rotatedImage[i - ((finalRow - finalColumn) / 2)][j + ((finalRow - finalColumn) / 2)];
+                    }
+                }
+            }
+            return finalImage;
+        } else if (finalColumn > finalRow) {
+            //Columns > Rows
+            for (int i = 0; i < finalImage.length; i++) {
+                for (int j = 0; j < finalImage[0].length; j++) {
+                    if ((j < ((finalColumn - finalRow) / 2)) || (j >= (finalColumn - ((finalColumn - finalRow) / 2)))) {
+                        finalImage[i][j] = RGBAPixel.getFillValue();
+                    } else {
+                        finalImage[i][j] =
+                                rotatedImage[i + ((finalColumn - finalRow) / 2)][j - ((finalColumn - finalRow) / 2)];
+                    }
+                }
+            }
+            return finalImage;
+        } else {
+            return rotatedImage;
+        }
+        /**
+         //Rotate right for a square matrix
+         for (int i = 0; i < originalImage.length; i++) {
+         for (int j = 0; j < originalImage[i].length; j++) {
+         rotatedImage[j][originalImage.length - 1 - i] = originalImage[i][j];
+         }
+         }
+         */
     }
 
     /**
@@ -169,66 +222,52 @@ public class Transform {
      */
     public static RGBAPixel[][] rotateRight(final RGBAPixel[][] originalImage) {
 
-        int m = originalImage.length; //"# of rows"
-        int n = originalImage[0].length; //"# of columns"
-        int big = m;
-        int small = n;
 
-        if (m > n) {
-            big = m;
-            small = n;
-        } else if (n > m) {
-            big = n;
-            small = m;
+        if (originalImage == null) {
+            return null;
         }
 
-        int boundary = (big - small) / 2;
+        RGBAPixel[][] rotatedImage = new RGBAPixel[originalImage[0].length][originalImage.length];
+        RGBAPixel[][] finalImage = new RGBAPixel[originalImage.length][originalImage[0].length];
 
-        RGBAPixel[][] rotatedImage = new RGBAPixel[n][m]; //invert rows/columns of originalImage
-        //If square matrix, simply rotate right
-        if (m == n) {
-            for (int i = 0; i < originalImage.length; i++) {
-                for (int j = 0; j < originalImage[i].length; j++) {
-                    rotatedImage[j][originalImage.length - 1 - i] = originalImage[i][j];
-                }
-            }
-            return rotatedImage;
-        } else if (m > n) {
-            for (int i = 0; i < rotatedImage.length; i++) {
-                for (int j = 0; j < rotatedImage[i].length; j++) {
-                    if (j < boundary) {
-                        rotatedImage[i][j] = RGBAPixel.getFillValue();
-                    } else if ((j >= boundary) && (j < rotatedImage[i].length - boundary)) {
-                        rotatedImage[j][originalImage.length - 1 - i] = originalImage[i][j];
-                    } else if (j >= rotatedImage[i].length - boundary) {
-                        rotatedImage[i][j] = RGBAPixel.getFillValue();
-                    }
-                }
-            }
-            return rotatedImage;
-        } else {
-            for (int i = 0; i < rotatedImage.length; i++) {
-                for (int j = 0; j < rotatedImage[i].length; j++) {
-                    if (i < boundary) {
-                        rotatedImage[i][j] = RGBAPixel.getFillValue();
-                    } else if ((i >= boundary) && (i < rotatedImage.length - boundary)) {
-                        rotatedImage[j][originalImage.length - 1 - i] = originalImage[i][j];
-                    } else if (i >= rotatedImage.length - boundary) {
-                        rotatedImage[i][j] = RGBAPixel.getFillValue();
-                    }
-                }
-            }
-            return rotatedImage;
+        int finalRow = originalImage.length;
+        int finalColumn = originalImage[0].length;
 
-        }
-        /**
-        //Rotate right for a square matrix
         for (int i = 0; i < originalImage.length; i++) {
             for (int j = 0; j < originalImage[i].length; j++) {
-                rotatedImage[j][originalImage.length - 1 - i] = originalImage[i][j];
+                rotatedImage[originalImage[i].length - 1 - j][i] = originalImage[i][j];
             }
         }
-         */
+
+        //Rows > Columns
+        if (finalRow > finalColumn) {
+            for (int i = 0; i < originalImage.length; i++) {
+                for (int j = 0; j < originalImage[0].length; j++) {
+                    if ((i < ((finalRow - finalColumn) / 2)) || (i >= (finalRow - ((finalRow - finalColumn) / 2)))) {
+                        finalImage[i][j] = RGBAPixel.getFillValue();
+                    } else {
+                        finalImage[i][j] =
+                                rotatedImage[i - ((finalRow - finalColumn) / 2)][j + ((finalRow - finalColumn) / 2)];
+                    }
+                }
+            }
+            return finalImage;
+        } else if (finalColumn > finalRow) {
+            //Columns > Rows
+            for (int i = 0; i < originalImage.length; i++) {
+                for (int j = 0; j < originalImage[0].length; j++) {
+                    if ((j < ((finalColumn - finalRow) / 2)) || (j >= (finalColumn - (finalColumn - finalRow) / 2))) {
+                        finalImage[i][j] = RGBAPixel.getFillValue();
+                    } else {
+                        finalImage[i][j] =
+                                rotatedImage[i + ((finalColumn - finalRow) / 2)][j - ((finalColumn - finalRow) / 2)];
+                    }
+                }
+            }
+            return finalImage;
+        } else {
+            return rotatedImage;
+        }
     }
 
     /**
@@ -245,10 +284,11 @@ public class Transform {
         RGBAPixel[][] flippedImage = new RGBAPixel[originalImage.length][originalImage[0].length];
         for (int i = 0; i < originalImage.length; i++) {
             for (int j = 0; j < originalImage[0].length; j++) {
-                flippedImage[i][originalImage[i].length - 1 - i] = originalImage[i][j];
+                flippedImage[i][originalImage[i].length - 1 - j] = originalImage[i][j];
             }
         }
         return flippedImage;
+
     }
 
     /**
