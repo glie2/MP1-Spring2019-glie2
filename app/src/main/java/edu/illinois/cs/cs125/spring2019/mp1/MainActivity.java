@@ -196,12 +196,12 @@ public final class MainActivity extends AppCompatActivity {
             startProcessImage("rotateRight");
         });
         final ImageButton flipHorizontal = findViewById(R.id.flipHorizontal);
-        rotateRight.setOnClickListener(v -> {
+        flipHorizontal.setOnClickListener(v -> {
             Log.d(TAG, "Flip horizontal button clicked");
             startProcessImage("flipHorizontal");
         });
         final ImageButton flipVertical = findViewById(R.id.flipVertical);
-        rotateRight.setOnClickListener(v -> {
+        flipVertical.setOnClickListener(v -> {
             Log.d(TAG, "Flip vertical button clicked");
             startProcessImage("flipVertical");
         });
