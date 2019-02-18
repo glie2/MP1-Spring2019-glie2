@@ -236,6 +236,12 @@ class Tasks {
                 case "rotateRight":
                     pixels = Transform.rotateRight(pixels);
                     break;
+                case "flipHorizontal":
+                    pixels = Transform.flipHorizontal(pixels);
+                    break;
+                case "flipVertical":
+                    pixels = Transform.flipVertical(pixels);
+                    break;
                 case "expand":
                     pixels = Transform.expandVertical(pixels, MainActivity.DEFAULT_SCALE_FACTOR);
                     pixels = Transform.expandHorizontal(pixels, MainActivity.DEFAULT_SCALE_FACTOR);

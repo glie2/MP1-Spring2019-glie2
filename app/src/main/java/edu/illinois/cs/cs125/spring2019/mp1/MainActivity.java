@@ -195,6 +195,16 @@ public final class MainActivity extends AppCompatActivity {
             Log.d(TAG, "Rotate right button clicked");
             startProcessImage("rotateRight");
         });
+        final ImageButton flipHorizontal = findViewById(R.id.flipHorizontal);
+        rotateRight.setOnClickListener(v -> {
+            Log.d(TAG, "Flip horizontal button clicked");
+            startProcessImage("flipHorizontal");
+        });
+        final ImageButton flipVertical = findViewById(R.id.flipVertical);
+        rotateRight.setOnClickListener(v -> {
+            Log.d(TAG, "Flip vertical button clicked");
+            startProcessImage("flipVertical");
+        });
         final ImageButton expand = findViewById(R.id.expand);
         expand.setOnClickListener(v -> {
             Log.d(TAG, "Expand button clicked");
